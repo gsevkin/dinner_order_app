@@ -78,23 +78,6 @@ class App extends Component{
     const { data } = this.state;
     return (
       <div>
-        <ul>
-          {data.length <= 0
-            ? 'NO DB ENTRIES YET'
-            : data.map((dat) => (
-                <li style={{ padding: '10px' }} key={data.message}>
-                  <span style={{ color: 'gray' }}> id: </span> {dat.id} <br />
-                  <span style={{ color: 'gray' }}> data: </span>
-                  {dat.dishName}
-                  <span style={{ color: 'gray' }}> content: </span>
-                  {dat.message}
-                  <span style={{ color: 'gray' }}> price: </span>
-                  {dat.price}
-                  <span style={{ color: 'gray' }}> date: </span>
-                  {dat.serveDate}
-                </li>
-              ))}
-        </ul>
         <div style={{ padding: '10px' }}>
           <input
             type="text"
@@ -145,6 +128,23 @@ class App extends Component{
             DELETE
           </button>
         </div>
+        <ul>
+          {data.length <= 0
+            ? 'NO DB ENTRIES YET'
+            : data.map((dat) => (
+                <li style={{ padding: '10px' }} key={data.message}>
+                  <span style={{ color: 'gray' }}> id: </span> {dat.id} <br />
+                  <span style={{ color: 'gray' }}> data: </span> 
+                  {dat.dishName} <br />
+                  <span style={{ color: 'gray' }}> content: </span>
+                  {dat.message} <br />
+                  <span style={{ color: 'gray' }}> price: </span>
+                  {dat.price} <br />
+                  <span style={{ color: 'gray' }}> date: </span>
+                  {dat.serveDate}
+                </li>
+              ))}
+        </ul>
       </div>
     );
   }
