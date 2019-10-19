@@ -60,7 +60,9 @@ router.delete('/deleteData', (req, res) => {
 router.post('/putData', (req, res) => {
   let data = new Data();
 
-  const { id, message } = req.body;
+  const { id, message, price, dishName, serveDate } = req.body;
+
+  console.log(`data save to DB, id: ${id} message: ${message} dishName: ${dishName} serveDate: ${serveDate}`)
 
   if((!id && id != 0) || !message){ 
     return res.json({
@@ -69,7 +71,10 @@ router.post('/putData', (req, res) => {
     });
   }
   data.message = message;
-   data.id = id;
+  data.id = id;
+  data.dishName = dishName;
+  data.price = price;
+  data.serveDate = serveDate;
   data.save((err) => {
     if(err) return res.json({ success: false, error: err });
     return res.json({ success: true });

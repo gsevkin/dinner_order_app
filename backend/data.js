@@ -5,7 +5,10 @@ const Schema = mongose.Schema;
 const DataSchema = new Schema(
     {
         id: Number,
-        message: String
+        dishName: String,
+        message: String,
+        price: Number,
+        serveDate: String
     },
     {timestamps: true}
 );

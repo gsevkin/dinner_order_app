@@ -7,6 +7,9 @@ class App extends Component{
     data: [],
     id: 0,
     message: null,
+    dishName: null,
+    price: null,
+    serveDate: null,
     intervalIsSet: false,
     idToDelete: null,
     idToUpdate: null,
@@ -36,7 +39,7 @@ class App extends Component{
       .then((res) => this.setState({ data: res.data }));
   };
   
-  putDataToDB = (message) => {
+  putDataToDB = (message, price, dishName, serveDate) => {
     let currentIds = this.state.data.map((data) => data.id);
     let idToBeAdded = 0;
     while(currentIds.includes(idToBeAdded)){
@@ -45,7 +48,10 @@ class App extends Component{
 
     axios.post('http://localhost:3001/api/putData', {
       id: idToBeAdded,
-      message: message
+      message: message,
+      price: price,
+      dishName: dishName,
+      serveDate: serveDate
     });
   };
 
@@ -65,22 +71,6 @@ class App extends Component{
     });
   };
 
-  updateDB = (idToUpdate, updateToApply) => {
-    let objIdToUpdate = null;
-    parseInt(idToUpdate);
-    this.state.data.forEach((dat) => {
-      if(dat.id == idToUpdate){
-        objIdToUpdate = dat._id;
-      }
-    });
-
-    axios.post('http://localhost:3001/api/updateData', {
-        id: objIdToUpdate,
-        update: { message: updateToApply },
-    });
-  };
-
-
   // here is our UI
   // it is easy to understand their functions when you
   // see them render into our screen
@@ -95,18 +85,50 @@ class App extends Component{
                 <li style={{ padding: '10px' }} key={data.message}>
                   <span style={{ color: 'gray' }}> id: </span> {dat.id} <br />
                   <span style={{ color: 'gray' }}> data: </span>
+                  {dat.dishName}
+                  <span style={{ color: 'gray' }}> content: </span>
                   {dat.message}
+                  <span style={{ color: 'gray' }}> price: </span>
+                  {dat.price}
+                  <span style={{ color: 'gray' }}> date: </span>
+                  {dat.serveDate}
                 </li>
               ))}
         </ul>
         <div style={{ padding: '10px' }}>
           <input
             type="text"
-            onChange={(e) => this.setState({ message: e.target.value })}
-            placeholder="add something in the database"
+            onChange={(e) => this.setState({ dishName: e.target.value })}
+            placeholder="new dish in the menu!"
             style={{ width: '200px' }}
           />
-          <button onClick={() => this.putDataToDB(this.state.message)}>
+        </div>
+        <div style={{ padding: '10px' }}>
+          <input
+            type="text"
+            onChange={(e) => this.setState({ message: e.target.value })}
+            placeholder="content"
+            style={{ width: '200px' }}
+          />
+        </div>
+        <div style={{ padding: '10px' }}>
+          <input
+            type="text"
+            onChange={(e) => this.setState({ price: e.target.value })}
+            placeholder="Price"
+            style={{ width: '200px' }}
+          />
+        </div>
+        <div  style={{ padding: '10px' }}>
+          <input
+            type="text"
+            onChange={(e) => this.setState({ serveDate: e.target.value })}
+            placeholder="Date"
+            style={{ width: '200px' }}
+          />
+        </div>
+        <div style={{ padding: '10px' }}>
+          <button onClick={() => this.putDataToDB(this.state.message, this.state.price, this.state.dishName, this.state.serveDate)}>
             ADD
           </button>
         </div>
@@ -117,29 +139,10 @@ class App extends Component{
             onChange={(e) => this.setState({ idToDelete: e.target.value })}
             placeholder="put id of item to delete here"
           />
+        </div>
+        <div  style={{ padding: '10px' }}>
           <button onClick={() => this.deleteFromDB(this.state.idToDelete)}>
             DELETE
-          </button>
-        </div>
-        <div style={{ padding: '10px' }}>
-          <input
-            type="text"
-            style={{ width: '200px' }}
-            onChange={(e) => this.setState({ idToUpdate: e.target.value })}
-            placeholder="id of item to update here"
-          />
-          <input
-            type="text"
-            style={{ width: '200px' }}
-            onChange={(e) => this.setState({ updateToApply: e.target.value })}
-            placeholder="put new value of the item here"
-          />
-          <button
-            onClick={() =>
-              this.updateDB(this.state.idToUpdate, this.state.updateToApply)
-            }
-          >
-            UPDATE
           </button>
         </div>
       </div>
