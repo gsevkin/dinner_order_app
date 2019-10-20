@@ -34,7 +34,7 @@ class AdminPage extends Component{
   }
 
   getDataFromDb = () => {
-    fetch('http://localhost:3001/api/getData')
+    fetch('http://localhost:3001/api/admin/getData')
       .then((data) => data.json())
       .then((res) => this.setState({ data: res.data }));
   };
@@ -46,7 +46,7 @@ class AdminPage extends Component{
       ++idToBeAdded;
     }
 
-    axios.post('http://localhost:3001/api/putData', {
+    axios.post('http://localhost:3001/api/admin/putData', {
       id: idToBeAdded,
       message: message,
       price: price,
@@ -64,7 +64,7 @@ class AdminPage extends Component{
       }
     });
 
-    axios.delete('http://localhost:3001/api/deleteData', {
+    axios.delete('http://localhost:3001/api/admin/deleteData', {
       data: {
         id: objIdToDelete,
       },

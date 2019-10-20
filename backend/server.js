@@ -1,9 +1,10 @@
-const mongose = require('mongoose');
+const mongoose = require('mongoose');
 const express = require('express');
 var cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
 const Data = require('./data');
+const OrderData = require('./OrderData');
 
 const API_PORT = 3001;
 const app = express();
@@ -15,9 +16,9 @@ const router = express.Router();
 const dbRoute = 'mongodb+srv://admin-user:admin-test@dinnerorders-bid27.mongodb.net/test?retryWrites=true&w=majority';
 
 // connect to database
-mongose.connect(dbRoute, { useNewUrlParser: true });
+mongoose.connect(dbRoute, { useNewUrlParser: true });
 
-let db = mongose.connection;
+let db = mongoose.connection;
 
 db.once('open', () => console.log('connected to database'));
 
@@ -30,15 +31,23 @@ app.use(bodyParser.json());
 app.use(logger('dev'));
 
 //get
-router.get('/getData', (req, res) => {
+router.get('/admin/getData', (req, res) => {
   Data.find((err, data) => {
     if(err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   });
 });
 
+//get
+router.get('/customer/getData', (req, res) => {
+  OrderData.find((err, data) => {
+    if(err) return res.json({ success: false, error: err });
+    return res.json({ success: true, data: data });
+  });
+});
+
 //update
-router.post('/updateData', (req, res) => {
+router.post('/admin/updateData', (req, res) => {
   const {id, update} = req.body;
   Data.findByIdAndUpdate(id, update, (err) => {
     if(err) return res.json({ success: false, error: err });
@@ -47,7 +56,7 @@ router.post('/updateData', (req, res) => {
 });
 
 //delete
-router.delete('/deleteData', (req, res) => {
+router.delete('/admin/deleteData', (req, res) => {
   const { id } = req.body;
   console.log(`id to delete: ${req.body}`);
   Data.findByIdAndRemove(id, (err) => {
@@ -57,7 +66,7 @@ router.delete('/deleteData', (req, res) => {
 });
 
 //create
-router.post('/putData', (req, res) => {
+router.post('/admin/putData', (req, res) => {
   let data = new Data();
 
   const { id, message, price, dishName, serveDate } = req.body;
@@ -81,6 +90,33 @@ router.post('/putData', (req, res) => {
   });
 });
 
+//create order
+router.post('/customer/putData', (req, res) => {
+  let data = new OrderData();
+
+  const { id, CustomerName, CustomerPhone, PickupTime, DishID, DishName, Amount, ServeDate } = req.body;
+
+  console.log(`data save to DB, id: ${id} dishName: ${DishName}  Amount: ${Amount} CustomerName: ${CustomerName} CustomerPhone: ${CustomerPhone} serveDate: ${ServeDate} pickup time: ${PickupTime}`)
+
+  if((!id && id != 0) || !CustomerName){ 
+    return res.json({
+      success: false,
+      error: 'INVALID INPUT'
+    });
+  }
+  data.id = id;
+  data.CustomerName = CustomerName;
+  data.CustomerPhone = CustomerPhone;
+  data.DishName = DishName;
+  data.Amount = Amount;
+  data.DishID = DishID;
+  data.ServeDate = ServeDate;
+  data.PickupTime = PickupTime;
+  data.save((err) => {
+    if(err) return res.json({ success: false, error: err });
+    return res.json({ success: true });
+  });
+});
 
 // append
 app.use('/api', router);

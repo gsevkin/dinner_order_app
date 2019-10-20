@@ -6,14 +6,24 @@ import React, { Component } from "react";
 class App extends Component {  
   render() {
     return (
-      <Router>
-        <div>
-          <Switch>
-            <Route exact path="/AdminPage" component={AdminPage} />
-            <Route exact path="/CustomerPage" component={CustomerPage} />
-          </Switch>
+      <React.Fragment>
+        <div style={{ padding: '10px' }}>
+          <button onClick={(e) => window.location.assign("/AdminPage")}>
+            Admin Page
+          </button>
+          <button onClick={(e) => window.location.assign("/CustomerPage")}>
+            Customer Page
+          </button>
         </div>
-      </Router>
+        <Router>
+          <div>
+            <Switch>
+              <Route exact path="/AdminPage" component={AdminPage} />
+              <Route exact path="/CustomerPage" component={CustomerPage} />
+            </Switch>
+          </div>
+        </Router>
+      </React.Fragment>
     );
   }
 }
