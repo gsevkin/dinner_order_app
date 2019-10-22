@@ -84,6 +84,7 @@ class AdminPage extends Component{
             onChange={(e) => this.setState({ dishName: e.target.value })}
             placeholder="new dish in the menu!"
             style={{ width: '200px' }}
+            
           />
         </div>
         <div style={{ padding: '10px' }}>
@@ -91,20 +92,20 @@ class AdminPage extends Component{
             type="text"
             onChange={(e) => this.setState({ message: e.target.value })}
             placeholder="content"
-            style={{ width: '200px' }}
+            style={{ width: '200px' }} 
           />
         </div>
         <div style={{ padding: '10px' }}>
           <input
-            type="text"
+            type="number" min="1" step="any"
             onChange={(e) => this.setState({ price: e.target.value })}
             placeholder="Price"
-            style={{ width: '200px' }}
+            style={{ width: '200px' }}  
           />
         </div>
         <div  style={{ padding: '10px' }}>
           <input
-            type="text"
+            type="date"
             onChange={(e) => this.setState({ serveDate: e.target.value })}
             placeholder="Date"
             style={{ width: '200px' }}
@@ -139,7 +140,7 @@ class AdminPage extends Component{
                   <span style={{ color: 'gray' }}> content: </span>
                   {dat.message} <br />
                   <span style={{ color: 'gray' }}> price: </span>
-                  {dat.price} <br />
+                  {dat.price} 
                   <span style={{ color: 'gray' }}> date: </span>
                   {dat.serveDate}
                 </li>

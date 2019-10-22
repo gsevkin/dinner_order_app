@@ -8,8 +8,8 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <div class="topnav" style={{ padding: '10px' }}>
-        <a class="active" onClick={(e) => window.location.assign("/CustomerPage")}>
+        <div className="topnav" style={{ padding: '10px' }}>
+        <a className="active" onClick={(e) => window.location.assign("/CustomerPage")}>
             Home
           </a>
           <a onClick={(e) => window.location.assign("/AdminPage")}>

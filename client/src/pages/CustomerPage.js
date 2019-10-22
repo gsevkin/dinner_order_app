@@ -12,6 +12,7 @@ class CustomerPage extends Component{
     PickupTime: null,
     ServeDate: null,
     DishName: null,
+    DishID: null,
     Amount: null,
     intervalIsSet: false,
     idToDelete: null,
@@ -21,6 +22,7 @@ class CustomerPage extends Component{
   //mount
   componentDidMount() {
     this.getOrderDataFromDb();
+    this.getDataFromDb();
     if(!this.state.intervalIsSet) {
       let interval = setInterval(this.getDataFromDb, 1000);
       this.setState({ intervalIsSet: interval });
@@ -41,7 +43,13 @@ class CustomerPage extends Component{
       .then((res) => this.setState({ orderData: res.data }));
   };
 
-  putOrderDataToDB = ( CustomerName, CustomerPhone, PickupTime, DishName, Amount, ServeDate) => {
+  getDataFromDb = () => {
+    fetch('http://localhost:3001/api/admin/getData')
+      .then((data) => data.json())
+      .then((res) => this.setState({ data: res.data }));
+  };
+
+  putOrderDataToDB = ( CustomerName, CustomerPhone, PickupTime, DishName, dishID, Amount, ServeDate) => {
     let currentIds = this.state.data.map((data) => data.id);
     let idToBeAdded = 0;
     while(currentIds.includes(idToBeAdded)){
@@ -54,65 +62,44 @@ class CustomerPage extends Component{
       CustomerPhone: CustomerPhone,
       DishName: DishName,
       Amount: Amount,
-      DishID: 0,
+      DishID: dishID,
       ServeDate: ServeDate,
       PickupTime: PickupTime,
     });
   };
 
+  onFoodSelect = (dishName, dishID) =>{
+    this.setState({ DishName: dishName });
+    this.setState({ DishID: dishID });
+  }
+
   render() {
+    const { data } = this.state;
     return(
-      <div>
-        <div class="row">
-          <div class="column">
-            <div class="card">
-              <h3>Card 1</h3>
-              <p>Some text</p>
-              <p>Some text</p>
-            </div>
-          </div>
-        
-          <div class="column">
-            <div class="card">
-              <h3>Card 2</h3>
-              <p>Some text</p>
-              <p>Some text</p>
-            </div>
-          </div>
-
-          <div class="column">
-            <div class="card">
-              <h3>Card 1</h3>
-              <p>Some text</p>
-              <p>Some text</p>
-            </div>
-          </div>
-
-          <div class="column">
-            <div class="card">
-              <h3>Card 1</h3>
-              <p>Some text</p>
-              <p>Some text</p>
-            </div>
-          </div>
-
-          <div class="column">
-            <div class="card">
-              <h3>Card 1</h3>
-              <p>Some text</p>
-              <p>Some text</p>
-            </div>
-          </div>
-
-        </div>
-
+    <div>
+      {data.length <= 0
+        ? 'NO DB ENTRIES YET'
+        : data.map((dat, i) => (
+            <div className="row" key={i}>
+              <div className="column">
+                <div className="card" onClick={ () => this.onFoodSelect( dat.dishName, dat.id ) }>
+                  <h3>{dat.dishName}</h3>
+                  <p>{dat.message}</p>
+                  <p>{dat.serveDate}</p>
+                  <p>{dat.price}€</p>
+                </div>
+              </div>
+            </div>  
+          ))}
+          
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         <div style={{ padding: '10px' }}>
           <div style={{ padding: '10px' }}>
             <input
               type="text"
-              onChange={(e) => this.setState({ CustomerName: e.target.value })}
               placeholder="Name"
               style={{ width: '200px' }}
+              onChange={(e) => this.setState({ CustomerName: e.target.value })}
             />
           </div>
           <div style={{ padding: '10px' }}>
@@ -126,14 +113,15 @@ class CustomerPage extends Component{
           <div style={{ padding: '10px' }}>
             <input
               type="text"
-              onChange={(e) => this.setState({ DishName: e.target.value })}
               placeholder="Name of the dish"
-              style={{ width: '200px' }}
+              style={{ width: '200px' }} 
+              value={ this.state.DishName ? this.state.DishName : ""}
+              readOnly="true" 
             />
           </div>
           <div style={{ padding: '10px' }}>
             <input
-              type="text"
+              type="number" min="1" step="any"
               onChange={(e) => this.setState({ Amout: e.target.value })}
               placeholder="Amount"
               style={{ width: '200px' }}
@@ -141,14 +129,14 @@ class CustomerPage extends Component{
           </div>
           <div style={{ padding: '10px' }}>
             <input
-              type="text"
+              type="time" min="16:00" max="20:00" required
               onChange={(e) => this.setState({ PickupTime: e.target.value })}
               placeholder="When will you pick up?"
               style={{ width: '200px' }}
             />
           </div>
           <div  style={{ padding: '10px' }}>
-          <button onClick={() => this.putOrderDataToDB(this.state.CustomerName, this.state.CustomerPhone, this.state.PickupTime, this.state.DishName, this.state.Amount, this.state.ServeDate)}>
+          <button onClick={() => this.putOrderDataToDB(this.state.CustomerName, this.state.CustomerPhone, this.state.PickupTime, this.state.DishName, this.state.DishID, this.state.Amount, this.state.ServeDate)}>
               ORDER
             </button>
           </div>
