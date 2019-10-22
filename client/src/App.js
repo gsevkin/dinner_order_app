@@ -1,19 +1,23 @@
 import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
 import AdminPage from './pages/adminPage';
 import CustomerPage from "./pages/CustomerPage";
+import "./items/navbar.css";
 import React, { Component } from "react";
 
 class App extends Component {  
   render() {
     return (
       <React.Fragment>
-        <div style={{ padding: '10px' }}>
-          <button onClick={(e) => window.location.assign("/AdminPage")}>
+        <div class="topnav" style={{ padding: '10px' }}>
+        <a class="active" onClick={(e) => window.location.assign("/CustomerPage")}>
+            Home
+          </a>
+          <a onClick={(e) => window.location.assign("/AdminPage")}>
             Admin Page
-          </button>
-          <button onClick={(e) => window.location.assign("/CustomerPage")}>
+          </a>
+          <a onClick={(e) => window.location.assign("/CustomerPage")}>
             Customer Page
-          </button>
+          </a>
         </div>
         <Router>
           <div>

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import "../items/foodcard.css"; 
 
 class CustomerPage extends Component{
   state = {
@@ -61,51 +62,96 @@ class CustomerPage extends Component{
 
   render() {
     return(
-      <div style={{ padding: '10px' }}>
-        <div style={{ padding: '10px' }}>
-          <input
-            type="text"
-            onChange={(e) => this.setState({ CustomerName: e.target.value })}
-            placeholder="Name"
-            style={{ width: '200px' }}
-          />
+      <div>
+        <div class="row">
+          <div class="column">
+            <div class="card">
+              <h3>Card 1</h3>
+              <p>Some text</p>
+              <p>Some text</p>
+            </div>
+          </div>
+        
+          <div class="column">
+            <div class="card">
+              <h3>Card 2</h3>
+              <p>Some text</p>
+              <p>Some text</p>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card">
+              <h3>Card 1</h3>
+              <p>Some text</p>
+              <p>Some text</p>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card">
+              <h3>Card 1</h3>
+              <p>Some text</p>
+              <p>Some text</p>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="card">
+              <h3>Card 1</h3>
+              <p>Some text</p>
+              <p>Some text</p>
+            </div>
+          </div>
+
         </div>
+
         <div style={{ padding: '10px' }}>
-          <input
-            type="text"
-            onChange={(e) => this.setState({ CustomerPhone: e.target.value })}
-            placeholder="Phone Number"
-            style={{ width: '200px' }}
-          />
-        </div>
-        <div style={{ padding: '10px' }}>
-          <input
-            type="text"
-            onChange={(e) => this.setState({ DishName: e.target.value })}
-            placeholder="Name of the dish"
-            style={{ width: '200px' }}
-          />
-        </div>
-        <div style={{ padding: '10px' }}>
-          <input
-            type="text"
-            onChange={(e) => this.setState({ Amout: e.target.value })}
-            placeholder="Amount"
-            style={{ width: '200px' }}
-          />
-        </div>
-        <div style={{ padding: '10px' }}>
-          <input
-            type="text"
-            onChange={(e) => this.setState({ PickupTime: e.target.value })}
-            placeholder="When will you pick up?"
-            style={{ width: '200px' }}
-          />
-        </div>
-        <div  style={{ padding: '10px' }}>
-        <button onClick={() => this.putOrderDataToDB(this.state.CustomerName, this.state.CustomerPhone, this.state.PickupTime, this.state.DishName, this.state.Amount, this.state.ServeDate)}>
-            ORDER
-          </button>
+          <div style={{ padding: '10px' }}>
+            <input
+              type="text"
+              onChange={(e) => this.setState({ CustomerName: e.target.value })}
+              placeholder="Name"
+              style={{ width: '200px' }}
+            />
+          </div>
+          <div style={{ padding: '10px' }}>
+            <input
+              type="text"
+              onChange={(e) => this.setState({ CustomerPhone: e.target.value })}
+              placeholder="Phone Number"
+              style={{ width: '200px' }}
+            />
+          </div>
+          <div style={{ padding: '10px' }}>
+            <input
+              type="text"
+              onChange={(e) => this.setState({ DishName: e.target.value })}
+              placeholder="Name of the dish"
+              style={{ width: '200px' }}
+            />
+          </div>
+          <div style={{ padding: '10px' }}>
+            <input
+              type="text"
+              onChange={(e) => this.setState({ Amout: e.target.value })}
+              placeholder="Amount"
+              style={{ width: '200px' }}
+            />
+          </div>
+          <div style={{ padding: '10px' }}>
+            <input
+              type="text"
+              onChange={(e) => this.setState({ PickupTime: e.target.value })}
+              placeholder="When will you pick up?"
+              style={{ width: '200px' }}
+            />
+          </div>
+          <div  style={{ padding: '10px' }}>
+          <button onClick={() => this.putOrderDataToDB(this.state.CustomerName, this.state.CustomerPhone, this.state.PickupTime, this.state.DishName, this.state.Amount, this.state.ServeDate)}>
+              ORDER
+            </button>
+          </div>
         </div>
       </div>
     );
