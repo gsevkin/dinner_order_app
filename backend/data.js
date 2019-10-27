@@ -1,5 +1,5 @@
-const mongose = require('mongoose');
-const Schema = mongose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 //data structure
 const DataSchema = new Schema(
@@ -14,4 +14,4 @@ const DataSchema = new Schema(
 );
 
 //export
-module.exports = mongose.model("Data", DataSchema);
+module.exports = mongoose.model("Data", DataSchema);
