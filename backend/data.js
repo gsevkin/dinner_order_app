@@ -8,7 +8,8 @@ const DataSchema = new Schema(
         dishName: String,
         message: String,
         price: Number,
-        serveDate: String
+        serveDate: String,
+        capacity: Number,
     },
     {timestamps: true}
 );

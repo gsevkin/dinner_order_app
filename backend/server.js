@@ -69,7 +69,7 @@ router.delete('/admin/deleteData', (req, res) => {
 router.post('/admin/putData', (req, res) => {
   let data = new Data();
 
-  const { id, message, price, dishName, serveDate } = req.body;
+  const { id, message, price, dishName, serveDate, capacity } = req.body;
 
   console.log(`data save to DB, id: ${id} message: ${message} dishName: ${dishName} serveDate: ${serveDate}`)
 
@@ -84,6 +84,7 @@ router.post('/admin/putData', (req, res) => {
   data.dishName = dishName;
   data.price = price;
   data.serveDate = serveDate;
+  data.capacity = capacity;
   data.save((err) => {
     if(err) return res.json({ success: false, error: err });
     return res.json({ success: true });
