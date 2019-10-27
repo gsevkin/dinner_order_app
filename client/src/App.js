@@ -8,16 +8,10 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className="topnav" style={{ padding: '10px' }}>
-        <a className="active" onClick={(e) => window.location.assign("/CustomerPage")}>
-            Home
-          </a>
-          <a onClick={(e) => window.location.assign("/AdminPage")}>
-            Admin Page
-          </a>
-          <a onClick={(e) => window.location.assign("/CustomerPage")}>
-            Customer Page
-          </a>
+        <div className="topnav" style={{ padding: '0px' }}>
+          <a className="active" onClick={(e) => window.location.assign("/CustomerPage")}>Home</a>
+          <a onClick={(e) => window.location.assign("/AdminPage")}>Admin Page</a>
+          <a onClick={(e) => window.location.assign("/CustomerPage")}>Customer Page</a>
         </div>
         <Router>
           <div>
@@ -27,6 +21,9 @@ class App extends Component {
             </Switch>
           </div>
         </Router>
+        <div className="footer" style={{ padding: '10px' }}>
+          <a type="input" id="Footer" ></a>
+        </div>
       </React.Fragment>
     );
   }

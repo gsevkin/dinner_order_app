@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {setFooterMessage} from '../helper';
 
 class AdminPage extends Component{
   //init state
@@ -9,7 +10,7 @@ class AdminPage extends Component{
     message: null,
     dishName: null,
     price: null,
-    serveDate: null,
+    serveDate: Date.now(),
     intervalIsSet: false,
     idToDelete: null,
     idToUpdate: null,
@@ -53,6 +54,9 @@ class AdminPage extends Component{
       dishName: dishName,
       serveDate: serveDate
     });
+
+    if(idToBeAdded != null)
+      setFooterMessage(`Item Added! ${dishName}will be served on ${serveDate}`, 0);
   };
 
   deleteFromDB = (idTodelete) => {
@@ -63,6 +67,14 @@ class AdminPage extends Component{
         objIdToDelete = dat._id;
       }
     });
+    
+    if(objIdToDelete == null)
+    {
+      setFooterMessage(`ID: ${idTodelete} couldn't found!`, 1);
+      return;
+    }
+    else
+      setFooterMessage(`ID: ${idTodelete} found and deleted!`, 0);
 
     axios.delete('http://localhost:3001/api/admin/deleteData', {
       data: {
@@ -71,6 +83,7 @@ class AdminPage extends Component{
     });
   };
 
+  
   // here is our UI
   // it is easy to understand their functions when you
   // see them render into our screen
@@ -107,7 +120,7 @@ class AdminPage extends Component{
           <input
             type="date"
             onChange={(e) => this.setState({ serveDate: e.target.value })}
-            placeholder="Date"
+            value={this.state.serveDate}
             style={{ width: '200px' }}
           />
         </div>
@@ -146,6 +159,7 @@ class AdminPage extends Component{
                 </li>
               ))}
         </ul>
+        <br /><br />
       </div>
     );
   }

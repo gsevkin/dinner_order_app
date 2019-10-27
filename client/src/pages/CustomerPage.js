@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import "../items/foodcard.css"; 
+import {setFooterMessage} from '../helper';
 
 class CustomerPage extends Component{
   state = {
@@ -66,12 +67,16 @@ class CustomerPage extends Component{
       ServeDate: ServeDate,
       PickupTime: PickupTime,
     });
+
+    if (idToBeAdded)
+      setFooterMessage(`Order Completed! You will `)
+
   };
 
   onFoodSelect = (dishName, dishID) =>{
     this.setState({ DishName: dishName });
     this.setState({ DishID: dishID });
-  }
+  };
 
   render() {
     const { data } = this.state;
