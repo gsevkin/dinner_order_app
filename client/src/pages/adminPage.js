@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {setFooterMessage, getDateNowDDMMYYYY} from '../helper';
 
 class AdminPage extends Component{
   //init state
@@ -9,7 +10,8 @@ class AdminPage extends Component{
     message: null,
     dishName: null,
     price: null,
-    serveDate: null,
+    serveDate: getDateNowDDMMYYYY(),
+    capacity: 10,
     intervalIsSet: false,
     idToDelete: null,
     idToUpdate: null,
@@ -23,6 +25,8 @@ class AdminPage extends Component{
       let interval = setInterval(this.getDataFromDb, 1000);
       this.setState({ intervalIsSet: interval });
     }
+    var today = getDateNowDDMMYYYY();
+    this.setState({ serveDate: today });
   }
 
   //unmount
@@ -39,20 +43,34 @@ class AdminPage extends Component{
       .then((res) => this.setState({ data: res.data }));
   };
   
-  putDataToDB = (message, price, dishName, serveDate) => {
+  putDataToDB = (message, price, dishName, serveDate, capacity) => {
     let currentIds = this.state.data.map((data) => data.id);
+    let maxID = -1;
     let idToBeAdded = 0;
-    while(currentIds.includes(idToBeAdded)){
-      ++idToBeAdded;
-    }
+        
+    for(var i = 0; i<currentIds.length; ++i){ 
+      if (currentIds[i] > maxID)
+        maxID = currentIds[i];
+     }
+      
+    idToBeAdded = maxID+1;
+
+    // while(currentIds.includes(idToBeAdded)){
+    //   ++idToBeAdded;
+    // }
 
     axios.post('http://localhost:3001/api/admin/putData', {
       id: idToBeAdded,
       message: message,
       price: price,
       dishName: dishName,
-      serveDate: serveDate
+      serveDate: serveDate,
+      capacity: capacity
     });
+
+    if(idToBeAdded != null)
+      setFooterMessage(`Item Added! ${dishName}will be served on ${serveDate}`, 0);
+
   };
 
   deleteFromDB = (idTodelete) => {
@@ -63,6 +81,14 @@ class AdminPage extends Component{
         objIdToDelete = dat._id;
       }
     });
+    
+    if(objIdToDelete == null)
+    {
+      setFooterMessage(`ID: ${idTodelete} couldn't found!`, 1);
+      return;
+    }
+    else
+      setFooterMessage(`ID: ${idTodelete} found and deleted!`, 0);
 
     axios.delete('http://localhost:3001/api/admin/deleteData', {
       data: {
@@ -71,6 +97,7 @@ class AdminPage extends Component{
     });
   };
 
+  
   // here is our UI
   // it is easy to understand their functions when you
   // see them render into our screen
@@ -107,12 +134,20 @@ class AdminPage extends Component{
           <input
             type="date"
             onChange={(e) => this.setState({ serveDate: e.target.value })}
-            placeholder="Date"
             style={{ width: '200px' }}
+            value={this.state.serveDate}
           />
         </div>
         <div style={{ padding: '10px' }}>
-          <button onClick={() => this.putDataToDB(this.state.message, this.state.price, this.state.dishName, this.state.serveDate)}>
+          <input
+            type="number" min="1"
+            style={{ width: '200px' }}
+            onChange={(e) => this.setState({ capacity: e.target.value })}
+            value={this.state.capacity}
+          />
+        </div>
+        <div style={{ padding: '10px' }}>
+          <button onClick={() => this.putDataToDB(this.state.message, this.state.price, this.state.dishName, this.state.serveDate, this.state.capacity)}>
             ADD
           </button>
         </div>
@@ -146,6 +181,7 @@ class AdminPage extends Component{
                 </li>
               ))}
         </ul>
+        <br /><br />
       </div>
     );
   }

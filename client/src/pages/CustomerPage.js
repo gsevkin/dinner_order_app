@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import "../items/foodcard.css"; 
+import {setFooterMessage} from '../helper';
 
 class CustomerPage extends Component{
   state = {
@@ -19,6 +20,7 @@ class CustomerPage extends Component{
     idToUpdate: null,
     objectToUpdate: null  
   };
+  
   //mount
   componentDidMount() {
     this.getOrderDataFromDb();
@@ -66,33 +68,61 @@ class CustomerPage extends Component{
       ServeDate: ServeDate,
       PickupTime: PickupTime,
     });
+
+    if (idToBeAdded)
+      setFooterMessage(`Order Completed! You will pick up ${DishName} on ${ServeDate}`)
   };
 
-  onFoodSelect = (dishName, dishID) =>{
+  onFoodSelect = (dishName, dishID, capacity) =>{
     this.setState({ DishName: dishName });
     this.setState({ DishID: dishID });
+
+    var amountInput = document.getElementById("Amount");
+    var remCapacity = capacity - this.getOrderedAmount(dishID);
+
+    amountInput.max=remCapacity;
+  };
+
+  getOrderedAmount = (dishID)=>{
+    let orderedAmout = 0;
+
+    this.state.orderData.forEach((dat) => {
+      if (dat.DishID == dishID)
+        orderedAmout += dat.Amount;
+    });
+    
+    return orderedAmout;
+  }
+
+  assignCardOnclickMethod = (dat)=>{
+    if (dat.capacity - this.getOrderedAmount(dat.id) >0)
+      return () => this.onFoodSelect( dat.dishName, dat.id, dat.capacity ) ;
+    else
+      return ()=>{};
   }
 
   render() {
     const { data } = this.state;
+
     return(
     <div>
       {data.length <= 0
         ? 'NO DB ENTRIES YET'
         : data.map((dat, i) => (
-            <div className="row" key={i}>
+            <div className="row" id={dat.id}>
               <div className="column">
-                <div className="card" onClick={ () => this.onFoodSelect( dat.dishName, dat.id ) }>
+                <div className="card" onClick={this.assignCardOnclickMethod(dat)}>
                   <h3>{dat.dishName}</h3>
                   <p>{dat.message}</p>
                   <p>{dat.serveDate}</p>
                   <p>{dat.price}€</p>
+                  <p>Remaining: {dat.capacity - this.getOrderedAmount(dat.id) }</p>
                 </div>
               </div>
             </div>  
           ))}
           
-        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+          <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
         <div style={{ padding: '10px' }}>
           <div style={{ padding: '10px' }}>
             <input
@@ -121,8 +151,9 @@ class CustomerPage extends Component{
           </div>
           <div style={{ padding: '10px' }}>
             <input
+              id="Amount"
               type="number" min="1" step="any"
-              onChange={(e) => this.setState({ Amout: e.target.value })}
+              onChange={(e) => this.setState({ Amount: e.target.value })}
               placeholder="Amount"
               style={{ width: '200px' }}
             />
