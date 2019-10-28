@@ -3,14 +3,19 @@ const express = require('express');
 var cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const Data = require('./data');
-const OrderData = require('./OrderData');
+const Data = require('./DataSchemas/data');
+const OrderData = require('./DataSchemas/OrderData');
+const usersRoute = require("./routes/user.route");
+const config = require("config");
+
 
 const API_PORT = 3001;
 const app = express();
 app.use(cors());
 const router = express.Router();
 
+app.use(express.json());
+app.use("/api/users", usersRoute);
 
 //database
 const dbRoute = 'mongodb+srv://admin-user:admin-test@dinnerorders-bid27.mongodb.net/test?retryWrites=true&w=majority';
