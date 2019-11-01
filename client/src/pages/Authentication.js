@@ -1,8 +1,17 @@
 exports.getUserDetails = () => {
     var _data = [];
-    fetch('http://localhost:3001/api/users/current')
-      .then((data) => data.json())
-      .then((res) => { _data = res.data });
+    const _token = window.sessionStorage.accessToken;
+
+    var obj = {  
+      method: 'POST',
+      headers: {
+        'authorization': _token
+      }
+    }
+      
+    fetch('http://localhost:3001/api/users/current', obj)
+      .then((res) => {if(res.data) _data = res.data.userInfo });
+          
     return _data;
 }
 
@@ -13,7 +22,3 @@ exports.isAutehticated = () => {
     else 
         return false;
 } 
-
-
-
-

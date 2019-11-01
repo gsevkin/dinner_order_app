@@ -6,7 +6,7 @@ import React, { Component } from "react";
 import {isAutehticated, getUserDetails} from "./pages/Authentication"
 import "./items/navbar.css";
 
-class App extends Component {  
+class App extends Component {
   render() {
     return (
       <React.Fragment>

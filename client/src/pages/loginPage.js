@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import {isAutehticated, getUserDetails} from "./Authentication"
+import {isAutehticated, getUserDetails, token} from "./Authentication"
 import {setFooterMessage, getDateNowDDMMYYYY} from '../helper';
 
 
@@ -12,7 +12,7 @@ class LoginPage extends Component{
       _password: null,
       _email: null,
       intervalIsSet: false
-    };
+    }; 
   
     //mount
     componentDidMount() {
@@ -29,19 +29,38 @@ class LoginPage extends Component{
         this.setState({ intervalIsSet: false });
       }
     }
-  
-    registerNewUser = (_state) => {
-     
-      const {_name, _email, _password} = _state;
-        
-      axios.post('http://localhost:3001/api/users', {
-        name: _name,
-        email: _email,
-        password: _password
-      }).then(setFooterMessage("User registered successfully!", 0), setFooterMessage("User cannot be registered!", 1));
 
+    loginUser (_name, _password) {
+     
+      axios.post('http://localhost:3001/api/users/login', {
+        name: _name,
+        password: _password
+      }).then((res)=> {
+            setFooterMessage("User is logged in", 0);
+            window.sessionStorage.accessToken = res.data.token;    
+          }, (err) => {
+            return setFooterMessage(err.error, 1);
+          } 
+        );
     };
 
+    registerNewUser (_name, _email, _password ) {
+     
+      axios.post('http://localhost:3001/api/users/', {
+          name: _name,
+          email: _email,     
+          password: _password
+      }).then(
+          (res)=> {
+            setFooterMessage("User is created", 0);
+            window.sessionStorage.accessToken = res.data.token;
+        }, (error) => {
+            return setFooterMessage(error.error, 1);
+        } 
+      );
+    
+    };
+  
     render() {
         const { data } = this.state;
         return (
@@ -68,8 +87,17 @@ class LoginPage extends Component{
                 style={{ width: '200px' }} />
             </div>
             <div style={{ padding: '10px' }}>
-                <button onClick={() => this.registerNewUser(this.state)}>
+              Token: <input
+                type="text"
+                value= {this.state._token}
+                style={{ width: '200px' }} />
+            </div>
+            <div style={{ padding: '10px' }}>
+                <button onClick={() => this.registerNewUser(this.state._name, this.state._email, this.state._password)}>
                     REGISTER
+                </button>
+                <button onClick={() => this.loginUser( this.state._name, this.state._password )}>
+                    LOG IN
                 </button>
             </div>
           </div>
