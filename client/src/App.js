@@ -12,8 +12,11 @@ class App extends Component {
       <React.Fragment>
         <div className="topnav" style={{ padding: '0px' }}>
           <a className="active" onClick={(e) => window.location.assign("/CustomerPage")}>Home</a>
-          <a onClick={(e) => window.location.assign("/AdminPage")}>Admin Page</a>
           <a onClick={(e) => window.location.assign("/CustomerPage")}>Customer Page</a>
+          {
+            isAutehticated() ?
+            <a onClick={(e) => window.location.assign("/AdminPage")}>Admin Page</a> : <b/>
+          }
           {
             isAutehticated() ? 
             <b>{getUserDetails().name}</b> :

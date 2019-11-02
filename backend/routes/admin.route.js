@@ -1,6 +1,7 @@
 const Data = require('./../DataSchemas/data');
 const express = require("express");
 const router = express.Router();
+const auth = require("../middlewares/auth");
 
 //get
 router.get('/admin/getData', (req, res) => {
@@ -11,7 +12,7 @@ router.get('/admin/getData', (req, res) => {
   });
 
 //update
-router.post('/admin/updateData', (req, res) => {
+router.post('/admin/updateData', auth.verifyToken,(req, res) => {
     const {id, update} = req.body;
     Data.findByIdAndUpdate(id, update, (err) => {
       if(err) return res.json({ success: false, error: err });
@@ -20,7 +21,7 @@ router.post('/admin/updateData', (req, res) => {
   });
   
   //delete
-  router.delete('/admin/deleteData', (req, res) => {
+  router.delete('/admin/deleteData', auth.verifyToken, (req, res) => {
     const { id } = req.body;
     console.log(`id to delete: ${req.body}`);
     Data.findByIdAndRemove(id, (err) => {
@@ -30,7 +31,7 @@ router.post('/admin/updateData', (req, res) => {
   });
   
   //create
-  router.post('/admin/putData', (req, res) => {
+  router.post('/admin/putData', auth.verifyToken, (req, res) => {
     let data = new Data();
   
     const { id, message, price, dishName, serveDate, capacity } = req.body;
