@@ -37,7 +37,9 @@ class LoginPage extends Component{
         password: _password
       }).then((res)=> {
             setFooterMessage("User is logged in", 0);
-            window.sessionStorage.accessToken = res.data.token;    
+            window.sessionStorage.name = res.data.name;    
+            window.sessionStorage.email = res.data.email;    
+            window.sessionStorage.token = res.data.token;    
           }, (err) => {
             return setFooterMessage(err.error, 1);
           } 
@@ -53,7 +55,10 @@ class LoginPage extends Component{
       }).then(
           (res)=> {
             setFooterMessage("User is created", 0);
-            window.sessionStorage.accessToken = res.data.token;
+            //window.sessionStorage.userInfo = res.data;
+            window.sessionStorage.name = res.data.name;    
+            window.sessionStorage.email = res.data.email;    
+            window.sessionStorage.token = res.data.token;   
         }, (error) => {
             return setFooterMessage(error.error, 1);
         } 
