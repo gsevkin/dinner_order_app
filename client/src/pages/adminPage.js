@@ -59,6 +59,11 @@ class AdminPage extends Component{
     //   ++idToBeAdded;
     // }
 
+    const header = {
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.token
+    }
+
     axios.post('http://localhost:3001/api/admin/putData', {
       id: idToBeAdded,
       message: message,
@@ -66,7 +71,7 @@ class AdminPage extends Component{
       dishName: dishName,
       serveDate: serveDate,
       capacity: capacity
-    });
+    }, {headers: header});
 
     if(idToBeAdded != null)
       setFooterMessage(`Item Added! ${dishName}will be served on ${serveDate}`, 0);
@@ -90,13 +95,18 @@ class AdminPage extends Component{
     else
       setFooterMessage(`ID: ${idTodelete} found and deleted!`, 0);
 
+    const header = {
+      'Content-Type': 'application/json',
+      'Authorization': window.sessionStorage.token
+    }
+
     axios.delete('http://localhost:3001/api/admin/deleteData', {
       data: {
         id: objIdToDelete,
       },
+      headers: header
     });
   };
-
   
   // here is our UI
   // it is easy to understand their functions when you

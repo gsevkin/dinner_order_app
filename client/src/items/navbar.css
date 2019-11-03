@@ -27,6 +27,19 @@ body {
   color: white;
 }
 
+.topnav a.login {
+  float: right;
+}
+
+.topnav b {
+  float: right;
+  color: white;
+  text-align: center;
+  padding: 12px 14px;
+  text-decoration: none;
+  font-size: 21px;
+}
+
 .footer {
   position: fixed;
   left: 0;
